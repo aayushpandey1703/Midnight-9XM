@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Midnight 9XM</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    body {
+      background-color: #121212;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      scroll-behavior: smooth;
+    }
+    .navbar {
+      background-color: #000;
+    }
+    .btn-custom {
+      background-color: #1db954;
+      color: white;
+      border-radius: 999px;
+      padding: 10px 30px;
+      font-weight: bold;
+    }
+    .btn-custom:hover {
+      background-color: #1ed760;
+    }
+    .hero {
+      padding: 100px 20px;
+      text-align: center;
+    }
+    .section-title {
+      margin: 60px 0 20px;
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 600;
+    }
+    .carousel-container {
+      position: relative;
+      padding: 20px;
+    }
+    .carousel-track {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      gap: 1rem;
+      padding-bottom: 10px;
+    }
+    .carousel-track::-webkit-scrollbar {
+      display: none;
+    }
+    .card {
+      min-width: 250px;
+      background-color: #1e1e1e;
+      scroll-snap-align: start;
+    }
+    .card img {
+      height: 160px;
+      object-fit: cover;
+    }
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.7);
+      border: none;
+      color: #fff;
+      font-size: 1.5rem;
+      padding: 10px;
+      z-index: 2;
+    }
+    .carousel-btn.left {
+      left: 0;
+    }
+    .carousel-btn.right {
+      right: 0;
+    }
+    footer {
+      background-color: #000;
+      padding: 30px;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+    .card-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.card-img-overlay {
+  overflow: hidden;
+}
+
+.play-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(30, 215, 96, 0.9);
+  color: white;
+  font-size: 1.8rem;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: 0.3s ease;
+  z-index: 2;
+}
+
+.card-wrapper:hover .play-btn {
+  opacity: 1;
+}
+.card-title {
+  font-size: 1rem;
+  white-space: nowrap;       /* Keep title in one line */
+  overflow: hidden;          /* Hide overflow text */
+  text-overflow: ellipsis;   /* Show ... for overflow */
+  margin: 0;
+}
+.card-meta {
+  white-space: nowrap;        /* Keep text on one line */
+  overflow: hidden;           /* Hide overflow */
+  text-overflow: ellipsis;    /* Show ... when overflow */
+  font-size: 0.85rem;
+  color: #ccc;
+  max-width: 100%;
+}
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark px-4">
+  <a class="navbar-brand fw-bold fs-3" href="#">Midnight 9XM</a>
+  <div class="collapse navbar-collapse justify-content-end">
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="#">Premium</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">Download</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">Sign Up</a></li>
+      <li class="nav-item"><a class="nav-link" href="#">Log In</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <h1>Enjoy Music Anytime</h1>
+  <p>Stream millions of songs, ad-free. Listen offline, on any device.</p>
+  <a href="#music-section" class="btn btn-custom">Get Started</a>
+</section>
+
+<!-- Music Section -->
+<div id="music-section" class="container py-5">
+
+  <!-- 🎵 Pop Carousel -->
+  <div class="section-title">Trending Albums</div>
+  <div class="carousel-container">
+    <button class="carousel-btn left" onclick="scrollCarousel('popCarousel', -1)">‹</button>
+    <div class="carousel-track" id="popCarousel">
+      {% for i in trending %}
+        <a href="/getalbum?id={{i.id}}" target="_blank" class="text-decoration-none card-wrapper">
+            <div class="card text-white">
+              <div class="card-img-overlay p-0 position-relative">
+                <img src="{{i.image}}" class="card-img-top">
+                <div class="play-btn"><i class="bi bi-play-fill"></i></div>
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">{{i.title}}</h5>
+                <p class="card-meta">{{i.date}} ● {{i.author}}</p>
+              </div>
+            </div>
+          </a>
+        {% endfor %}
+
+
+
+    </div>
+    <button class="carousel-btn right" onclick="scrollCarousel('popCarousel', 1)">›</button>
+  </div>
+
+  <!-- 🎸 Rock Carousel -->
+  <div class="section-title">Popular albums and singles</div>
+  <div class="carousel-container">
+    <button class="carousel-btn left" onclick="scrollCarousel('rockCarousel', -1)">‹</button>
+    <div class="carousel-track" id="rockCarousel">
+      <div class="card text-white">
+        <img src="https://source.unsplash.com/400x200/?rock,1" class="card-img-top">
+        <div class="card-body">
+          <h5 class="card-title">Rock Legend 1</h5>
+          <p>The golden age of rock.</p>
+        </div>
+      </div>
+      <div class="card text-white">
+        <img src="https://source.unsplash.com/400x200/?rock,2" class="card-img-top">
+        <div class="card-body">
+          <h5 class="card-title">Rock Legend 2</h5>
+          <p>Heavy guitars and classic energy.</p>
+        </div>
+      </div>
+      <div class="card text-white">
+        <img src="https://source.unsplash.com/400x200/?rock,3" class="card-img-top">
+        <div class="card-body">
+          <h5 class="card-title">Rock Legend 3</h5>
+          <p>Epic solos and anthems.</p>
+        </div>
+      </div>
+    </div>
+    <button class="carousel-btn right" onclick="scrollCarousel('rockCarousel', 1)">›</button>
+  </div>
+
+  <!-- 🌙 Chill Carousel -->
+  <div class="section-title">Popular Radio</div>
+  <div class="carousel-container">
+    <button class="carousel-btn left" onclick="scrollCarousel('chillCarousel', -1)">‹</button>
+    <div class="carousel-track" id="chillCarousel">
+      <div class="card text-white">
+        <img src="https://source.unsplash.com/400x200/?chill,1" class="card-img-top">
+        <div class="card-body">
+          <h5 class="card-title">Chill Track 1</h5>
+          <p>Relaxed lo-fi sounds.</p>
+        </div>
+      </div>
+      <div class="card text-white">
+        <img src="https://source.unsplash.com/400x200/?chill,2" class="card-img-top">
+        <div class="card-body">
+          <h5 class="card-title">Chill Track 2</h5>
+          <p>Evening acoustic vibes.</p>
+        </div>
+      </div>
+      <div class="card text-white">
+        <img src="https://source.unsplash.com/400x200/?chill,3" class="card-img-top">
+        <div class="card-body">
+          <h5 class="card-title">Chill Track 3</h5>
+          <p>Soft beats and ambient moods.</p>
+        </div>
+      </div>
+    </div>
+    <button class="carousel-btn right" onclick="scrollCarousel('chillCarousel', 1)">›</button>
+  </div>
+  <!-- 🌙 Chill Carousel -->
+  <div class="section-title">Editor's Choice</div>
+  <div class="carousel-container">
+    <button class="carousel-btn left" onclick="scrollCarousel('chillCarousel', -1)">‹</button>
+    <div class="carousel-track" id="chillCarousel">
+      <div class="card text-white">
+        <img src="https://source.unsplash.com/400x200/?chill,1" class="card-img-top">
+        <div class="card-body">
+          <h5 class="card-title">Chill Track 1</h5>
+          <p>Relaxed lo-fi sounds.</p>
+        </div>
+      </div>
+      <div class="card text-white">
+        <img src="https://source.unsplash.com/400x200/?chill,2" class="card-img-top">
+        <div class="card-body">
+          <h5 class="card-title">Chill Track 2</h5>
+          <p>Evening acoustic vibes.</p>
+        </div>
+      </div>
+      <div class="card text-white">
+        <img src="https://source.unsplash.com/400x200/?chill,3" class="card-img-top">
+        <div class="card-body">
+          <h5 class="card-title">Chill Track 3</h5>
+          <p>Soft beats and ambient moods.</p>
+        </div>
+      </div>
+    </div>
+    <button class="carousel-btn right" onclick="scrollCarousel('chillCarousel', 1)">›</button>
+  </div>
+
+</div>
+
+<!-- Footer -->
+<footer>
+  © 2025 Midnight 9XM. All rights reserved.
+</footer>
+
+<!-- Scroll Script -->
+<script>
+  function scrollCarousel(id, direction) {
+    const el = document.getElementById(id);
+    const card = el.querySelector('.card');
+    const scrollAmount = card.offsetWidth + parseInt(getComputedStyle(card).marginRight || 16);
+    el.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+  }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
