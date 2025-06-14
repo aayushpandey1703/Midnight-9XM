@@ -13,10 +13,14 @@
       color: #fff;
       font-family: 'Segoe UI', sans-serif;
       scroll-behavior: smooth;
+      margin: 0;
     }
+
     .navbar {
       background-color: #000;
+      z-index: 1030;
     }
+
     .btn-custom {
       background-color: #1db954;
       color: white;
@@ -24,23 +28,28 @@
       padding: 10px 30px;
       font-weight: bold;
     }
+
     .btn-custom:hover {
       background-color: #1ed760;
     }
+
     .hero {
-      padding: 100px 20px;
+      padding: 100px 20px 50px;
       text-align: center;
     }
+
     .section-title {
       margin: 60px 0 20px;
       text-align: center;
       font-size: 2rem;
       font-weight: 600;
     }
+
     .carousel-container {
       position: relative;
       padding: 20px;
     }
+
     .carousel-track {
       display: flex;
       overflow-x: auto;
@@ -49,18 +58,22 @@
       gap: 1rem;
       padding-bottom: 10px;
     }
+
     .carousel-track::-webkit-scrollbar {
       display: none;
     }
+
     .card {
       min-width: 250px;
       background-color: #1e1e1e;
       scroll-snap-align: start;
     }
+
     .card img {
       height: 160px;
       object-fit: cover;
     }
+
     .carousel-btn {
       position: absolute;
       top: 50%;
@@ -72,67 +85,237 @@
       padding: 10px;
       z-index: 2;
     }
+
     .carousel-btn.left {
       left: 0;
     }
+
     .carousel-btn.right {
       right: 0;
     }
+
     footer {
       background-color: #000;
       padding: 30px;
       text-align: center;
       font-size: 0.9rem;
     }
+
     .card-wrapper {
-  position: relative;
+      position: relative;
+      display: inline-block;
+    }
+
+    .card-img-overlay {
+      overflow: hidden;
+    }
+
+    .play-btn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(30, 215, 96, 0.9);
+      color: white;
+      font-size: 1.8rem;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: 0.3s ease;
+      z-index: 2;
+    }
+
+    .card-wrapper:hover .play-btn {
+      opacity: 1;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin: 0;
+    }
+
+    .card-meta {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 0.85rem;
+      color: #ccc;
+      max-width: 100%;
+    }
+
+    /* Sidebar */
+    #sidebar {
+      width: 250px;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+      background: linear-gradient(to bottom, #004d40, #000);
+      z-index: 1040;
+    }
+
+    #sidebar.active {
+      transform: translateX(0%);
+    }
+
+    .sidebar-toggle {
+      z-index: 1050;
+    }
+
+    @media (min-width: 992px) {
+      #sidebar {
+        transform: translateX(0%);
+        position: fixed;
+        height: 100vh;
+      }
+
+      .main-content {
+        margin-left: 250px;
+      }
+
+      .sidebar-toggle {
+        display: none !important;
+      }
+    }
+
+    /* Green textured background */
+    .main-content {
+      background: linear-gradient(to bottom, rgba(18, 30, 18, 0.8), #121212),
+                  url('https://www.transparenttextures.com/patterns/green-fibers.png');
+      background-blend-mode: overlay;
+      background-size: cover;
+    }
+    .card-wrapper {
   display: inline-block;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.card-img-overlay {
-  overflow: hidden;
-}
-
-.play-btn {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: rgba(30, 215, 96, 0.9);
-  color: white;
-  font-size: 1.8rem;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: 0.3s ease;
-  z-index: 2;
+.hover-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 15px rgba(30, 215, 96, 0.5);
 }
 
 .card-wrapper:hover .play-btn {
   opacity: 1;
 }
-.card-title {
+.card-wrapper {
+  display: inline-block;
+  text-decoration: none;
+}
+
+.hover-card {
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.hover-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(30, 215, 96, 0.6);
+}
+
+.hover-card img {
+  transition: transform 0.4s ease;
+}
+
+.hover-card:hover img {
+  transform: scale(1.1);
+}
+.artist-card {
+  background-color: transparent;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 12px;
+}
+
+.artist-card:hover {
+  transform: scale(1.07);
+  box-shadow: 0 0 15px rgba(30, 215, 96, 0.3);
+}
+
+.artist-img-wrapper {
+  width: 140px;
+  height: 140px;
+  margin: auto;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.artist-card:hover .artist-img-wrapper {
+  transform: scale(1.05);
+}
+
+.artist-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.artist-name {
+  font-weight: 600;
   font-size: 1rem;
-  white-space: nowrap;       /* Keep title in one line */
-  overflow: hidden;          /* Hide overflow text */
-  text-overflow: ellipsis;   /* Show ... for overflow */
-  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.card-meta {
-  white-space: nowrap;        /* Keep text on one line */
-  overflow: hidden;           /* Hide overflow */
-  text-overflow: ellipsis;    /* Show ... when overflow */
-  font-size: 0.85rem;
-  color: #ccc;
-  max-width: 100%;
+.navbar {
+  background: linear-gradient(to right, #004d40, #000);
+  z-index: 1030;
+  border-bottom: 1px solid rgba(30, 215, 96, 0.3);
 }
+
+.navbar .navbar-brand {
+  color: #1db954 !important;
+}
+
+.navbar .nav-link {
+  color: rgba(255, 255, 255, 0.8);
+  transition: color 0.3s ease;
+}
+
+.navbar .nav-link:hover {
+  color: #1db954;
+}
+.navbar .nav-link:hover {
+  color: #1db954;
+  text-shadow: 0 0 5px rgba(30, 215, 96, 0.6);
+}
+
   </style>
 </head>
 <body>
+
+<!-- Sidebar Toggle Button -->
+<button class="btn btn-outline-light position-fixed top-0 start-0 m-3 d-lg-none sidebar-toggle" onclick="toggleSidebar()">
+  <i class="bi bi-list"></i>
+</button>
+
+<!-- Sidebar -->
+<div id="sidebar" class="position-fixed top-0 start-0 vh-100 p-3 shadow d-flex flex-column">
+  <h4 class="text-white mb-4">Browse</h4>
+  <ul class="nav flex-column mb-4">
+    <li class="nav-item mb-2"><a class="nav-link text-white" href="#">Home</a></li>
+    <li class="nav-item mb-2"><a class="nav-link text-white" href="#music-section">Albums</a></li>
+    <li class="nav-item mb-2"><a class="nav-link text-white" href="#">Radio</a></li>
+    <li class="nav-item mb-2"><a class="nav-link text-white" href="#">Genres</a></li>
+    <li class="nav-item mb-2"><a class="nav-link text-white" href="#">Top Charts</a></li>
+  </ul>
+  <div class="mt-auto">
+    <button class="btn btn-custom w-100">
+      <i class="bi bi-plus-circle me-2"></i>Create Playlist
+    </button>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div class="main-content">
 
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark px-4">
@@ -155,137 +338,121 @@
 </section>
 
 <!-- Music Section -->
-<div id="music-section" class="container py-5">
-
-  <!-- 🎵 Pop Carousel -->
-  <div class="section-title">Trending Albums</div>
+<div id="music-section" class="container">
+  <div class="section-title">India's Best</div>
   <div class="carousel-container">
     <button class="carousel-btn left" onclick="scrollCarousel('popCarousel', -1)">‹</button>
     <div class="carousel-track" id="popCarousel">
-      {% for i in trending %}
-        <a href="/getalbum?id={{i.id}}" target="_blank" class="text-decoration-none card-wrapper">
-            <div class="card text-white">
-              <div class="card-img-overlay p-0 position-relative">
-                <img src="{{i.image}}" class="card-img-top">
-                <div class="play-btn"><i class="bi bi-play-fill"></i></div>
-              </div>
-              <div class="card-body">
-                <h5 class="card-title">{{i.title}}</h5>
-                <p class="card-meta">{{i.date}} ● {{i.author}}</p>
-              </div>
-            </div>
-          </a>
-        {% endfor %}
-
-
-
+      <!-- Example Album -->
+       {%for i in trending%}
+       <a href="/webplayer?id={{i.id}}&type=album" class="card-wrapper">
+        <div class="card text-white hover-card">
+          <div class="card-img-overlay p-0 position-relative">
+            <img src="{{i.image}}" class="card-img-top" alt="Album Cover">
+            <div class="play-btn"><i class="bi bi-play-fill"></i></div>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">{{i.title}}</h5>
+            <p class="card-meta">{{i.date}} ● {{i.author}}</p>
+          </div>
+        </div>
+      </a>
+      {%endfor%}
+      <!-- Add more cards dynamically or manually -->
     </div>
     <button class="carousel-btn right" onclick="scrollCarousel('popCarousel', 1)">›</button>
   </div>
+</div> <!-- /main-content -->
 
-  <!-- 🎸 Rock Carousel -->
-  <div class="section-title">Popular albums and singles</div>
+<!-- Music Section -->
+<div id="music-section" class="container py-5">
+  <div class="section-title">Popular English Albums</div>
   <div class="carousel-container">
-    <button class="carousel-btn left" onclick="scrollCarousel('rockCarousel', -1)">‹</button>
-    <div class="carousel-track" id="rockCarousel">
-      <div class="card text-white">
-        <img src="https://source.unsplash.com/400x200/?rock,1" class="card-img-top">
-        <div class="card-body">
-          <h5 class="card-title">Rock Legend 1</h5>
-          <p>The golden age of rock.</p>
+    <button class="carousel-btn left" onclick="scrollCarousel('popCarousel', -1)">‹</button>
+    <div class="carousel-track" id="popCarousel">
+      <!-- Example Album -->
+       {%for i in eng_trending%}
+       <a href="/webplayer?id={{i.id}}&type=album" class="card-wrapper">
+        <div class="card text-white hover-card">
+          <div class="card-img-overlay p-0 position-relative">
+            <img src="{{i.image}}" class="card-img-top" alt="Album Cover">
+            <div class="play-btn"><i class="bi bi-play-fill"></i></div>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">{{i.title}}</h5>
+            <p class="card-meta">{{i.date}} ● {{i.author}}</p>
+          </div>
         </div>
-      </div>
-      <div class="card text-white">
-        <img src="https://source.unsplash.com/400x200/?rock,2" class="card-img-top">
-        <div class="card-body">
-          <h5 class="card-title">Rock Legend 2</h5>
-          <p>Heavy guitars and classic energy.</p>
-        </div>
-      </div>
-      <div class="card text-white">
-        <img src="https://source.unsplash.com/400x200/?rock,3" class="card-img-top">
-        <div class="card-body">
-          <h5 class="card-title">Rock Legend 3</h5>
-          <p>Epic solos and anthems.</p>
-        </div>
-      </div>
+      </a>
+      {%endfor%}
+      <!-- Add more cards dynamically or manually -->
     </div>
-    <button class="carousel-btn right" onclick="scrollCarousel('rockCarousel', 1)">›</button>
+    <button class="carousel-btn right" onclick="scrollCarousel('popCarousel', 1)">›</button>
   </div>
+</div> <!-- /main-content -->
 
-  <!-- 🌙 Chill Carousel -->
-  <div class="section-title">Popular Radio</div>
+<!-- Artist Section -->
+<div id="artist-section" class="container">
+  <div class="section-title">Popular Global Artists</div>
   <div class="carousel-container">
-    <button class="carousel-btn left" onclick="scrollCarousel('chillCarousel', -1)">‹</button>
-    <div class="carousel-track" id="chillCarousel">
-      <div class="card text-white">
-        <img src="https://source.unsplash.com/400x200/?chill,1" class="card-img-top">
-        <div class="card-body">
-          <h5 class="card-title">Chill Track 1</h5>
-          <p>Relaxed lo-fi sounds.</p>
+    <button class="carousel-btn left" onclick="scrollCarousel('artistCarousel', -1)">‹</button>
+    <div class="carousel-track" id="artistCarousel">
+      {% for artist in artists_list %}
+      <a href="/webplayer?id={{artist.id}}&type=artist" class="card-wrapper text-decoration-none text-center">
+        <div class="artist-card text-white p-2">
+          <div class="artist-img-wrapper mb-2">
+            <img src="{{artist.image}}" alt="{{artist.title}}" class="artist-img">
+          </div>
+          <div class="artist-name">{{artist.title}}</div>
+          <div class="card-meta text-muted">{{artist.followers}} Followers</div>
         </div>
-      </div>
-      <div class="card text-white">
-        <img src="https://source.unsplash.com/400x200/?chill,2" class="card-img-top">
-        <div class="card-body">
-          <h5 class="card-title">Chill Track 2</h5>
-          <p>Evening acoustic vibes.</p>
-        </div>
-      </div>
-      <div class="card text-white">
-        <img src="https://source.unsplash.com/400x200/?chill,3" class="card-img-top">
-        <div class="card-body">
-          <h5 class="card-title">Chill Track 3</h5>
-          <p>Soft beats and ambient moods.</p>
-        </div>
-      </div>
+      </a>
+      {% endfor %}
     </div>
-    <button class="carousel-btn right" onclick="scrollCarousel('chillCarousel', 1)">›</button>
+    <button class="carousel-btn right" onclick="scrollCarousel('artistCarousel', 1)">›</button>
   </div>
-  <!-- 🌙 Chill Carousel -->
-  <div class="section-title">Editor's Choice</div>
-  <div class="carousel-container">
-    <button class="carousel-btn left" onclick="scrollCarousel('chillCarousel', -1)">‹</button>
-    <div class="carousel-track" id="chillCarousel">
-      <div class="card text-white">
-        <img src="https://source.unsplash.com/400x200/?chill,1" class="card-img-top">
-        <div class="card-body">
-          <h5 class="card-title">Chill Track 1</h5>
-          <p>Relaxed lo-fi sounds.</p>
-        </div>
-      </div>
-      <div class="card text-white">
-        <img src="https://source.unsplash.com/400x200/?chill,2" class="card-img-top">
-        <div class="card-body">
-          <h5 class="card-title">Chill Track 2</h5>
-          <p>Evening acoustic vibes.</p>
-        </div>
-      </div>
-      <div class="card text-white">
-        <img src="https://source.unsplash.com/400x200/?chill,3" class="card-img-top">
-        <div class="card-body">
-          <h5 class="card-title">Chill Track 3</h5>
-          <p>Soft beats and ambient moods.</p>
-        </div>
-      </div>
-    </div>
-    <button class="carousel-btn right" onclick="scrollCarousel('chillCarousel', 1)">›</button>
-  </div>
-
 </div>
 
-<!-- Footer -->
-<footer>
-  © 2025 Midnight 9XM. All rights reserved.
-</footer>
 
-<!-- Scroll Script -->
+<!-- Music Section -->
+<div id="music-section" class="container">
+  <div class="section-title">Best Workout playlist</div>
+  <div class="carousel-container">
+    <button class="carousel-btn left" onclick="scrollCarousel('popCarousel', -1)">‹</button>
+    <div class="carousel-track" id="popCarousel">
+      <!-- Example Album -->
+       {%for i in workout_list%}
+       <a href="/webplayer?id={{i.id}}&type=playlist" class="card-wrapper">
+        <div class="card text-white hover-card">
+          <div class="card-img-overlay p-0 position-relative">
+            <img src="{{i.image}}" class="card-img-top" alt="Album Cover">
+            <div class="play-btn"><i class="bi bi-play-fill"></i></div>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">{{i.title}}</h5>
+            <p class="card-meta">By {{i.author}} ● {{i.tracks}} songs</p>
+          </div>
+        </div>
+      </a>
+      {%endfor%}
+      <!-- Add more cards dynamically or manually -->
+    </div>
+    <button class="carousel-btn right" onclick="scrollCarousel('popCarousel', 1)">›</button>
+  </div>
+</div> <!-- /main-content -->
+
+<!-- Scripts -->
 <script>
   function scrollCarousel(id, direction) {
     const el = document.getElementById(id);
     const card = el.querySelector('.card');
     const scrollAmount = card.offsetWidth + parseInt(getComputedStyle(card).marginRight || 16);
     el.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+  }
+
+  function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    sidebar.classList.toggle('active');
   }
 </script>
 

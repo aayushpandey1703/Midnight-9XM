@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>I-Pop Icons Playlist</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #121212;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .playlist-header {
+      position: relative;
+      height: 350px;
+      background-image: url('https://static.vecteezy.com/system/resources/thumbnails/026/433/446/small/abstract-musical-note-symbol-painting-black-background-generative-ai-photo.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      display: flex;
+      align-items: flex-end;
+      padding: 2rem;
+    }
+
+    .playlist-overlay {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 1rem 2rem;
+      border-radius: 10px;
+    }
+
+    .playlist-info h1 {
+      font-size: 2.5rem;
+      font-weight: bold;
+    }
+
+    .playlist-info p {
+      color: #ccc;
+      margin-bottom: 0.25rem;
+    }
+
+    .song-card {
+      display: flex;
+      align-items: center;
+      padding: 1rem;
+      border-bottom: 1px solid #333;
+      transition: background 0.3s ease;
+    }
+
+    .song-card:hover {
+      background: #1e1e1e;
+    }
+
+    .song-card img {
+      width: 60px;
+      height: 60px;
+      border-radius: 5px;
+      margin-right: 1rem;
+    }
+
+    .song-details {
+      flex-grow: 1;
+    }
+
+    .play-btn {
+      background: none;
+      border: none;
+      color: #1db954;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .play-btn:hover {
+      color: #1ed760;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="playlist-header">
+    <div class="playlist-overlay">
+      <div class="playlist-info">
+        <h1>I-Pop Icons</h1>
+        <p>Timeless classics and modern hits from Indian Pop icons.</p>
+        <p><strong>Spotify • 50 Songs • 2 hr 40 min</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container mt-4">
+    <!-- Song Card Example -->
+    <div class="song-card">
+      <img src="https://static.vecteezy.com/system/resources/thumbnails/026/433/446/small/abstract-musical-note-symbol-painting-black-background-generative-ai-photo.jpg" alt="Album Art">
+      <div class="song-details">
+        <h5 class="mb-1">Tum Mile</h5>
+        <p class="mb-0 text-muted">Neeraj Shridhar</p>
+      </div>
+      <button class="play-btn" title="Play"><i class="bi bi-play-circle-fill"></i></button>
+    </div>
+
+    <div class="song-card">
+      <img src="https://via.placeholder.com/60" alt="Album Art">
+      <div class="song-details">
+        <h5 class="mb-1">Made in India</h5>
+        <p class="mb-0 text-muted">Alisha Chinai</p>
+      </div>
+      <button class="play-btn" title="Play"><i class="bi bi-play-circle-fill"></i></button>
+    </div>
+  </div>
+
+  <!-- Bootstrap Icons -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.js"></script>
+</body>
+</html>
