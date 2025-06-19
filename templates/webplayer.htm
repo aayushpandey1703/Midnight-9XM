@@ -4,18 +4,68 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>I-Pop Icons Playlist</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
   <style>
     body {
       background-color: #121212;
       color: #fff;
       font-family: 'Segoe UI', sans-serif;
+      margin: 0;
     }
 
+    /* Navbar */
+    .navbar {
+      background: linear-gradient(to right, #004d40, #000);
+      border-bottom: 1px solid rgba(30, 215, 96, 0.3);
+      z-index: 1030;
+    }
+
+    .navbar .navbar-brand {
+      color: #1db954 !important;
+    }
+
+    .navbar .nav-link {
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .navbar .nav-link:hover {
+      color: #1db954;
+      text-shadow: 0 0 5px rgba(30, 215, 96, 0.6);
+    }
+
+    /* Sidebar */
+    #sidebar {
+      width: 250px;
+      background: linear-gradient(to bottom, #004d40, #000);
+      position: fixed;
+      top: 56px;
+      left: 0;
+      bottom: 0;
+      padding: 1rem;
+      z-index: 1040;
+    }
+
+    #sidebar .nav-link {
+      color: white;
+      margin-bottom: 10px;
+    }
+
+    #sidebar .nav-link:hover {
+      color: #1db954;
+    }
+
+    /* Main content */
+    .main-content {
+      margin-left: 250px;
+      padding-top: 56px;
+    }
+
+    /* Playlist Header */
     .playlist-header {
       position: relative;
       height: 350px;
-      background-image: url('https://static.vecteezy.com/system/resources/thumbnails/026/433/446/small/abstract-musical-note-symbol-painting-black-background-generative-ai-photo.jpg');
+      background-image: url('{{album_cover.image}}');
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -40,6 +90,7 @@
       margin-bottom: 0.25rem;
     }
 
+    /* Song Cards */
     .song-card {
       display: flex;
       align-items: center;
@@ -74,30 +125,75 @@
     .play-btn:hover {
       color: #1ed760;
     }
+
+    /* Responsive Sidebar Toggle (Optional) */
+    @media (max-width: 992px) {
+      #sidebar {
+        display: none;
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+    }
   </style>
 </head>
 <body>
 
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold" href="#">Midnight 9XM</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="#">Premium</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Download</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Sign Up</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Log In</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Sidebar -->
+<div id="sidebar">
+  <h5 class="text-white">Browse</h5>
+  <nav class="nav flex-column">
+    <a class="nav-link" href="#">Home</a>
+    <a class="nav-link" href="#">Playlists</a>
+    <a class="nav-link" href="#">Top Charts</a>
+    <a class="nav-link" href="#">Favorites</a>
+    <a class="nav-link" href="#">Settings</a>
+  </nav>
+</div>
+
+<!-- Main Content -->
+<div class="main-content">
   <div class="playlist-header">
     <div class="playlist-overlay">
       <div class="playlist-info">
-        <h1>I-Pop Icons</h1>
-        <p>Timeless classics and modern hits from Indian Pop icons.</p>
-        <p><strong>Spotify • 50 Songs • 2 hr 40 min</strong></p>
+        <h1>{{album_cover.name}}y</h1>
+        <p>Timeless classics and modern hits from Indian Pop icons</p>
+        <p><strong>Midnight • {{album_cover.total_tracks}} Songs • 2 hr 40 min</strong></p>
       </div>
     </div>
   </div>
 
   <div class="container mt-4">
-    <!-- Song Card Example -->
+    <!-- Song Cards -->
+    {%for i in album_track%}
     <div class="song-card">
       <img src="https://static.vecteezy.com/system/resources/thumbnails/026/433/446/small/abstract-musical-note-symbol-painting-black-background-generative-ai-photo.jpg" alt="Album Art">
       <div class="song-details">
-        <h5 class="mb-1">Tum Mile</h5>
-        <p class="mb-0 text-muted">Neeraj Shridhar</p>
+        <h5 class="mb-1">{{i.name}}</h5>
+        <p class="mb-0 text-muted">{{i.author}}</p>
       </div>
       <button class="play-btn" title="Play"><i class="bi bi-play-circle-fill"></i></button>
     </div>
+    {%endfor%}
 
     <div class="song-card">
       <img src="https://via.placeholder.com/60" alt="Album Art">
@@ -109,7 +205,8 @@
     </div>
   </div>
 
-  <!-- Bootstrap Icons -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.js"></script>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -142,9 +142,34 @@ def index():
         return render_template("error.htm")
 
 @app.get("/webplayer")
+# @token_generator
 def webplayer_get():
     try:
-        return render_template("webplayer.htm")
+        header={
+            "Authorization":f"Bearer {TOKEN}"
+        }
+        id=request.args.get("id")
+        type=request.args.get("type")
+        if type=="album":
+            track_cover={}
+            album_track=[]
+            track={}
+            response=requests.get(
+                f"https://api.spotify.com/v1/albums?id={id}&market=IN",
+                headers=header
+            )
+            response_dict=response.json()
+            track_cover["image"]=response_dict["images"][0]
+            track_cover["name"]=response_dict["name"]
+            track_cover["total_tracks"]=response_dict["total_tracks"]
+            for i in response_dict["tracks"]["items"]:
+                artists_list=[j["name"] for j in i["artists"]]
+                track["artists"]=",".join(artists_list)
+                track["name"]=i["name"]
+                track["duration"]=i["durattion_ms"]
+                album_track.append(track)
+                        
+        return render_template("webplayer.htm",album_cover=track_cover,album_track=album_track)
     except Exception as e:
         logger.error("Error in loading webplayer:")
         logger.error(str(e))
