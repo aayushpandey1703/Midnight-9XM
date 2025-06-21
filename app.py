@@ -2,11 +2,13 @@ from flask import Flask, render_template, redirect, url_for, make_response,reque
 import requests
 from loguru import logger
 import json
+import functools
 
 app=Flask(__name__)
 
 TOKEN=None
 def token_generator(func):
+    @functools.wraps(func)
     def wrapper(*args, **kwargs):
         global TOKEN
         logger.debug("Generating token...")
@@ -35,7 +37,7 @@ def token_generator(func):
 def index():
     try:
         # Get trending albums
-        url=f"https://api.spotify.com/v1/search?q=tag:India best&type=album&market=IN&limit=20&offset=0"
+        url=f"https://api.spotify.com/v1/search?q=tag:India trending&type=album&market=IN&limit=20&offset=0"
         header={
             "Authorization":f"Bearer {TOKEN}"
         }
@@ -142,9 +144,10 @@ def index():
         return render_template("error.htm")
 
 @app.get("/webplayer")
-# @token_generator
+@token_generator
 def webplayer_get():
     try:
+        print(TOKEN)
         header={
             "Authorization":f"Bearer {TOKEN}"
         }
@@ -155,21 +158,36 @@ def webplayer_get():
             album_track=[]
             track={}
             response=requests.get(
-                f"https://api.spotify.com/v1/albums?id={id}&market=IN",
+                f"https://api.spotify.com/v1/albums/{id}?market=IN",
                 headers=header
             )
+            if response.status_code!=200:
+                raise Exception(f"request failed with status code:{response.status_code}")
             response_dict=response.json()
-            track_cover["image"]=response_dict["images"][0]
+            track_cover["image"]=response_dict["images"][0]["url"]
+            print(track_cover["image"])
             track_cover["name"]=response_dict["name"]
             track_cover["total_tracks"]=response_dict["total_tracks"]
             for i in response_dict["tracks"]["items"]:
+                track={}
+                # track_id=i["id"]
+                # track_response=requests.get(
+                #     f"https://api.spotify.com/v1/tracks/{track_id}",
+                #     headers=header
+                # )
+                # track_dict=track_response.json()
+                # if track_response.status_code==200:
+                #     image_url=track_dict["album"]["images"][0]["url"]
+                # else:
+                #     image_url=None
                 artists_list=[j["name"] for j in i["artists"]]
                 track["artists"]=",".join(artists_list)
                 track["name"]=i["name"]
-                track["duration"]=i["durattion_ms"]
+                track["duration"]=i["duration_ms"]
+                # track["image"]=image_url
                 album_track.append(track)
-                        
-        return render_template("webplayer.htm",album_cover=track_cover,album_track=album_track)
+            
+        return render_template("webplayer.htm",album_cover=track_cover,album=album_track)
     except Exception as e:
         logger.error("Error in loading webplayer:")
         logger.error(str(e))
