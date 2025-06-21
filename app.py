@@ -32,6 +32,13 @@ def token_generator(func):
         return func(*args, **kwargs)
     return wrapper
 
+def follower_round(followers):
+    if len(str(followers))==6:
+        followers=followere%100
+        return str(followers)+"k"
+    else:
+        return None
+
 @app.get("/")
 @token_generator
 def index():
@@ -192,6 +199,15 @@ def webplayer_get():
         logger.error("Error in loading webplayer:")
         logger.error(str(e))
         return "Error in loading webplayer "+str(e)
+
+@app.post("/playlist")
+def playlist_add():
+    try:
+        logger.info("Added")
+    except Exception as e:
+        logger.error("Error while adding to playlist")
+        logger.error(str(e))
+        return str(e)
 
 if __name__=="__main__":
     app.run(debug=True,port="5000",host="0.0.0.0")

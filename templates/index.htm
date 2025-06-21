@@ -339,7 +339,7 @@
 
 <!-- Music Section -->
 <div id="music-section" class="container">
-  <div class="section-title">India's Best</div>
+  <div class="section-title">India's Best Album</div>
   <div class="carousel-container">
     <button class="carousel-btn left" onclick="scrollCarousel('popCarousel', -1)">‹</button>
     <div class="carousel-track" id="popCarousel">
@@ -404,7 +404,7 @@
             <img src="{{artist.image}}" alt="{{artist.title}}" class="artist-img">
           </div>
           <div class="artist-name">{{artist.title}}</div>
-          <div class="card-meta text-muted">{{artist.followers}} Followers</div>
+          <div class="card-meta">{{artist.followers}} Followers</div>
         </div>
       </a>
       {% endfor %}
@@ -440,15 +440,72 @@
     <button class="carousel-btn right" onclick="scrollCarousel('popCarousel', 1)">›</button>
   </div>
 </div> <!-- /main-content -->
+<!-- Your Playlists Section -->
+<div id="your-playlists-section" class="container py-5">
+  <div class="section-title">Your Playlists</div>
+  <div class="carousel-container">
+    <button class="carousel-btn left" onclick="scrollCarousel('yourPlaylistsCarousel', -1)">‹</button>
+    <div class="carousel-track" id="yourPlaylistsCarousel">
+      <!-- Sample Playlists (replace with dynamic content if needed) -->
+      <a href="#" class="card-wrapper">
+        <div class="card text-white hover-card">
+          <div class="card-img-overlay p-0 position-relative">
+            <img src="https://static.vecteezy.com/system/resources/thumbnails/013/250/427/small_2x/music-notation-illustration-for-icon-symbol-art-illustration-apps-website-logo-or-graphic-design-element-format-png.png" class="card-img-top" alt="Playlist Cover">
+            <div class="play-btn"><i class="bi bi-play-fill"></i></div>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">Morning Vibes</h5>
+            <p class="card-meta">By You ● 20 songs</p>
+          </div>
+        </div>
+      </a>
+
+      <a href="#" class="card-wrapper">
+        <div class="card text-white hover-card">
+          <div class="card-img-overlay p-0 position-relative">
+            <img src="https://static.vecteezy.com/system/resources/thumbnails/013/250/427/small_2x/music-notation-illustration-for-icon-symbol-art-illustration-apps-website-logo-or-graphic-design-element-format-png.png" class="card-img-top" alt="Playlist Cover">
+            <div class="play-btn"><i class="bi bi-play-fill"></i></div>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">Focus Beats</h5>
+            <p class="card-meta">By You ● 18 songs</p>
+          </div>
+        </div>
+      </a>
+
+      <a href="#" class="card-wrapper">
+        <div class="card text-white hover-card">
+          <div class="card-img-overlay p-0 position-relative">
+            <img src="https://static.vecteezy.com/system/resources/thumbnails/013/250/427/small_2x/music-notation-illustration-for-icon-symbol-art-illustration-apps-website-logo-or-graphic-design-element-format-png.png" class="card-img-top" alt="Playlist Cover">
+            <div class="play-btn"><i class="bi bi-play-fill"></i></div>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">Party Hits</h5>
+            <p class="card-meta">By You ● 45 songs</p>
+          </div>
+        </div>
+      </a>
+    </div>
+    <button class="carousel-btn right" onclick="scrollCarousel('yourPlaylistsCarousel', 1)">›</button>
+  </div>
+</div>
 
 <!-- Scripts -->
 <script>
-  function scrollCarousel(id, direction) {
-    const el = document.getElementById(id);
-    const card = el.querySelector('.card');
-    const scrollAmount = card.offsetWidth + parseInt(getComputedStyle(card).marginRight || 16);
-    el.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
-  }
+function scrollCarousel(id, direction) {
+  const el = document.getElementById(id);
+  const card = el.querySelector('.card');
+  const scrollAmount = card.offsetWidth + parseInt(getComputedStyle(card).marginRight || 16);
+  el.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+}
+function scrollCarousel(id, direction) {
+  const el = document.getElementById(id);
+  const card = el.querySelector('.card') || el.querySelector('.artist-card');
+  if (!card) return;
+  const scrollAmount = card.offsetWidth + 16;
+  el.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+}
+
 
   function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
