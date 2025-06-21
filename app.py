@@ -3,6 +3,7 @@ import requests
 from loguru import logger
 import json
 import functools
+import psycopg2
 
 app=Flask(__name__)
 
@@ -32,12 +33,22 @@ def token_generator(func):
         return func(*args, **kwargs)
     return wrapper
 
-def follower_round(followers):
-    if len(str(followers))==6:
-        followers=followere%100
-        return str(followers)+"k"
-    else:
-        return None
+def dbconnection():
+    try:
+        connection=psycopg2.connect(
+            database="defaultdb",
+            host="pg-336977da-aleronpeterson-6630.b.aivencloud.com",
+            user="avnadmin",
+            password="AVNS_TbvbOoIlAM6X64RKzxL",
+            port=19275,
+            sslmode="verify-ca",
+            sslrootcert="./DB_cert/ca.pem"
+        )
+        return True,connection
+    except Exception as e:
+        logger.error("Error connecting to DB")
+        logger.error(str(e))
+        return False, None
 
 @app.get("/")
 @token_generator
@@ -203,7 +214,11 @@ def webplayer_get():
 @app.post("/playlist")
 def playlist_add():
     try:
-        logger.info("Added")
+        trackID=request.form.get("trackID")
+        playlistID=request.form.get("playlistID")
+        logger.info(trackID)
+        logger.info(playlistID)
+        return "True"
     except Exception as e:
         logger.error("Error while adding to playlist")
         logger.error(str(e))
