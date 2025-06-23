@@ -58,6 +58,7 @@ def index():
     try:
         session_uid=request.cookies.get("session_uid",None)
         login_message=request.args.get("login_message",None)
+        login_message=request.args.get("playlist_message",None)
         print(session_uid)
         if session_uid:
             userdata=session[session_uid]
@@ -254,6 +255,11 @@ def login():
 @token_generator
 def webplayer_get():
     try:
+        session_uid=request.cookies.get("session_uid")
+        if session_uid==None:
+            userdata=None
+        else:
+            userdata=session[session_uid]
         print(TOKEN)
         header={
             "Authorization":f"Bearer {TOKEN}"
@@ -294,20 +300,45 @@ def webplayer_get():
                 # track["image"]=image_url
                 album_track.append(track)
             
-        return render_template("webplayer.htm",album_cover=track_cover,album=album_track)
+        return render_template("webplayer.htm",userdata=userdata,album_cover=track_cover,album=album_track)
     except Exception as e:
         logger.error("Error in loading webplayer:")
         logger.error(str(e))
         return "Error in loading webplayer "+str(e)
 
-@app.post("/playlist")
-def playlist_add():
+@app.post("/create_playlist")
+def create_playlist():
     try:
-        trackID=request.form.get("trackID")
-        playlistID=request.form.get("playlistID")
-        logger.info(trackID)
-        logger.info(playlistID)
-        return "True"
+        session_uid=request.cookies.get("session_uid")
+        playlist_name=request.form.get("title")
+        if session_uid:
+            userdata=session[session_uid]
+            userID=userdata["userID"]
+        else:
+            raise Exception("[create playlist error] session ID does not exists")
+        status,connection,error=dbconnection()
+        if connection:
+            cursor=connection.cursor()
+            query=f'''
+            INSERT INTO user_playlist (user_id,playlist_name)
+            VALUES ({userID},'{playlist_name}');
+             '''
+            cursor.execute(query)
+            connection.commit()
+            cursor.close()
+            connection.close
+        else:
+            raise Exception("Failed to connect to DB "+str(error))
+        return redirect(url_for("index",playlist_message="playlist added successfully!"))
+    except Exception as e:
+        logger.error("Error while adding to playlist")
+        logger.error(str(e))
+        return str(e)
+
+@app.get("/get_playlist")
+def get_playlist():
+    try:
+        return "Work in progress"
     except Exception as e:
         logger.error("Error while adding to playlist")
         logger.error(str(e))

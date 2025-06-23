@@ -187,8 +187,22 @@
       <ul class="navbar-nav ms-auto">
         <li class="nav-item"><a class="nav-link" href="#">Premium</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Download</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Sign Up</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Log In</a></li>
+        {%if userdata == None%}
+        <li class="nav-item">
+          <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#signupModal">Sign Up</a>
+        </li>   
+        {%else%}
+        <li class="nav-item"><a class="nav-link" href="/logout">logout</a></li>
+        {%endif%}
+        {%if userdata == None%}
+        <li class="nav-item">
+          <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Log In</a>
+        </li>
+        {%else%}
+        <li class="nav-item">
+          <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">{{userdata.username}}</a>
+        </li>
+        {%endif%}
       </ul>
     </div>
   </div>
@@ -198,16 +212,24 @@
 <div id="sidebar" class="position-fixed top-0 start-0 vh-100 p-3 shadow d-flex flex-column">
   <h4 class="text-white mb-4">Browse</h4>
   <ul class="nav flex-column mb-4">
-    <li class="nav-item mb-2"><a class="nav-link text-white" href="#">Home</a></li>
-    <li class="nav-item mb-2"><a class="nav-link text-white" href="#music-section">Albums</a></li>
+    <li class="nav-item mb-2"><a class="nav-link text-white" href="/">Home</a></li>
+    {%if userdata != None%}
+    <li class="nav-item mb-2"><a class="nav-link text-white" href="/get_playlist">Playlists</a></li>
+    {%endif%}
     <li class="nav-item mb-2"><a class="nav-link text-white" href="#">Radio</a></li>
     <li class="nav-item mb-2"><a class="nav-link text-white" href="#">Genres</a></li>
     <li class="nav-item mb-2"><a class="nav-link text-white" href="#">Top Charts</a></li>
   </ul>
   <div class="mt-auto">
-    <button class="btn btn-custom w-100">
-      <i class="bi bi-plus-circle me-2"></i>Create Playlist
-    </button>
+    <button class="btn btn-custom w-100" 
+    {% if userdata != None %}
+      data-bs-toggle="modal" data-bs-target="#createPlaylistModal"
+    {% else %}
+      data-bs-toggle="modal" data-bs-target="#loginModal"
+    {% endif %}
+  >
+    <i class="bi bi-plus-circle me-2"></i>Create Playlist
+  </button>
   </div>
 </div>
 
@@ -288,6 +310,80 @@
       </div>
       <div class="modal-footer border-top border-secondary">
         <button id="addplay" class="btn btn-success" data-bs-dismiss="modal">Add</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Sign Up Modal -->
+<div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header border-0">
+        <h5 class="modal-title" id="signupModalLabel">Create Account</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="signupForm" action="/register" method="POST">
+          <div class="mb-3">
+            <label for="signupUsername" class="form-label">Username</label>
+            <input type="text" class="form-control" id="signupUsername" name="username" required>
+          </div>
+          <div class="mb-3">
+            <label for="signupEmail" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="signupEmail" name="email" required>
+          </div>
+          <div class="mb-3">
+            <label for="signupPassword" class="form-label">Password</label>
+            <input type="password" class="form-control" id="signupPassword" name="password" required>
+          </div>
+          <button type="submit" class="btn btn-custom w-100">Register</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Login Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header border-0">
+        <h5 class="modal-title" id="loginModalLabel">Log In</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="loginForm" action="/login" method="POST">
+          <div class="mb-3">
+            <label for="loginEmail" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="loginEmail" name="email" required>
+          </div>
+          <div class="mb-3">
+            <label for="loginPassword" class="form-label">Password</label>
+            <input type="password" class="form-control" id="loginPassword" name="password" required>
+          </div>
+          <button type="submit" class="">Login</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Create Playlist Modal -->
+<div class="modal fade" id="createPlaylistModal" tabindex="-1" aria-labelledby="createPlaylistModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header border-0">
+        <h5 class="modal-title" id="createPlaylistModalLabel">New Playlist</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="createPlaylistForm" action="/create_playlist" method="POST">
+          <div class="mb-3">
+            <label for="playlistName" class="form-label">Playlist Name</label>
+            <input type="text" class="form-control" id="playlistName" name="title" required>
+          </div>
+          <button type="submit" class="btn btn-custom w-100">Create Playlist</button>
+        </form>
       </div>
     </div>
   </div>

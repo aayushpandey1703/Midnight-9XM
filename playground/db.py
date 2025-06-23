@@ -34,6 +34,24 @@ CREATE TABLE "login" (
     output.close()
     return
 
+def create_playlist(output):
+    cursor=output.cursor()
+    query='''
+CREATE TABLE "user_playlist" (
+  playlist_id SERIAL PRIMARY KEY,
+  user_id INT NOT NULL,
+  playlist_name varchar(255),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES login(id) ON DELETE CASCADE
+);
+
+     '''
+    cursor.execute(query)
+    output.commit()
+    cursor.close()
+    output.close()
+    return
+
 def show_table(output):
     cursor=output.cursor()
     query='''   SELECT table_name
@@ -51,7 +69,17 @@ def select(output):
     table=cursor.fetchall()
     print(table)
     return
+
+def select_playlist(output):
+    cursor=output.cursor()
+    query='''SELECT * FROM user_playlist;'''
+    cursor.execute(query)
+    table=cursor.fetchall()
+    print(table)
+    return
 status,output=dbconnection()
 # create(output)
 # # show_table(output)
-select(output)
+# select(output)
+# create_playlist(output)
+select_playlist(output)

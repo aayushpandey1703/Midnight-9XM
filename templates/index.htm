@@ -302,15 +302,23 @@
   <h4 class="text-white mb-4">Browse</h4>
   <ul class="nav flex-column mb-4">
     <li class="nav-item mb-2"><a class="nav-link text-white" href="#">Home</a></li>
-    <li class="nav-item mb-2"><a class="nav-link text-white" href="#music-section">Albums</a></li>
+    {%if userdata != None%}
+    <li class="nav-item mb-2"><a class="nav-link text-white" href="/get_playlist">Playlists</a></li>
+    {%endif%}
     <li class="nav-item mb-2"><a class="nav-link text-white" href="#">Radio</a></li>
     <li class="nav-item mb-2"><a class="nav-link text-white" href="#">Genres</a></li>
     <li class="nav-item mb-2"><a class="nav-link text-white" href="#">Top Charts</a></li>
   </ul>
   <div class="mt-auto">
-    <button class="btn btn-custom w-100">
-      <i class="bi bi-plus-circle me-2"></i>Create Playlist
-    </button>
+    <button class="btn btn-custom w-100" 
+    {% if userdata != None %}
+      data-bs-toggle="modal" data-bs-target="#createPlaylistModal"
+    {% else %}
+      data-bs-toggle="modal" data-bs-target="#loginModal"
+    {% endif %}
+  >
+    <i class="bi bi-plus-circle me-2"></i>Create Playlist
+  </button>
   </div>
 </div>
 
@@ -353,7 +361,7 @@
   <p>Stream millions of songs, ad-free. Listen offline, on any device.</p>
   <a href="#music-section" class="btn btn-custom">Get Started</a>
 </section>
-
+<!-- 
 <!-- Music Section -->
 <div id="music-section" class="container">
   <div class="section-title">India's Best Album</div>
@@ -457,55 +465,6 @@
     <button class="carousel-btn right" onclick="scrollCarousel('popCarousel', 1)">›</button>
   </div>
 </div> <!-- /main-content -->
-<!-- Your Playlists Section -->
-<div id="your-playlists-section" class="container py-5">
-  <div class="section-title">Your Playlists</div>
-  <div class="carousel-container">
-    <button class="carousel-btn left" onclick="scrollCarousel('yourPlaylistsCarousel', -1)">‹</button>
-    <div class="carousel-track" id="yourPlaylistsCarousel">
-      <!-- Sample Playlists (replace with dynamic content if needed) -->
-      <a href="#" class="card-wrapper">
-        <div class="card text-white hover-card">
-          <div class="card-img-overlay p-0 position-relative">
-            <img src="https://static.vecteezy.com/system/resources/thumbnails/013/250/427/small_2x/music-notation-illustration-for-icon-symbol-art-illustration-apps-website-logo-or-graphic-design-element-format-png.png" class="card-img-top" alt="Playlist Cover">
-            <div class="play-btn"><i class="bi bi-play-fill"></i></div>
-          </div>
-          <div class="card-body">
-            <h5 class="card-title">Morning Vibes</h5>
-            <p class="card-meta">By You ● 20 songs</p>
-          </div>
-        </div>
-      </a>
-
-      <a href="#" class="card-wrapper">
-        <div class="card text-white hover-card">
-          <div class="card-img-overlay p-0 position-relative">
-            <img src="https://static.vecteezy.com/system/resources/thumbnails/013/250/427/small_2x/music-notation-illustration-for-icon-symbol-art-illustration-apps-website-logo-or-graphic-design-element-format-png.png" class="card-img-top" alt="Playlist Cover">
-            <div class="play-btn"><i class="bi bi-play-fill"></i></div>
-          </div>
-          <div class="card-body">
-            <h5 class="card-title">Focus Beats</h5>
-            <p class="card-meta">By You ● 18 songs</p>
-          </div>
-        </div>
-      </a>
-
-      <a href="#" class="card-wrapper">
-        <div class="card text-white hover-card">
-          <div class="card-img-overlay p-0 position-relative">
-            <img src="https://static.vecteezy.com/system/resources/thumbnails/013/250/427/small_2x/music-notation-illustration-for-icon-symbol-art-illustration-apps-website-logo-or-graphic-design-element-format-png.png" class="card-img-top" alt="Playlist Cover">
-            <div class="play-btn"><i class="bi bi-play-fill"></i></div>
-          </div>
-          <div class="card-body">
-            <h5 class="card-title">Party Hits</h5>
-            <p class="card-meta">By You ● 45 songs</p>
-          </div>
-        </div>
-      </a>
-    </div>
-    <button class="carousel-btn right" onclick="scrollCarousel('yourPlaylistsCarousel', 1)">›</button>
-  </div>
-</div>
 
 <!-- Sign Up Modal -->
 <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
@@ -555,6 +514,26 @@
             <input type="password" class="form-control" id="loginPassword" name="password" required>
           </div>
           <button type="submit" class="btn btn-custom w-100">Login</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Create Playlist Modal -->
+<div class="modal fade" id="createPlaylistModal" tabindex="-1" aria-labelledby="createPlaylistModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header border-0">
+        <h5 class="modal-title" id="createPlaylistModalLabel">New Playlist</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="createPlaylistForm" action="/create_playlist" method="POST">
+          <div class="mb-3">
+            <label for="playlistName" class="form-label">Playlist Name</label>
+            <input type="text" class="form-control" id="playlistName" name="title" required>
+          </div>
+          <button type="submit" class="btn btn-custom w-100">Create Playlist</button>
         </form>
       </div>
     </div>
