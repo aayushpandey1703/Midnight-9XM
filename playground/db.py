@@ -9,7 +9,7 @@ def dbconnection():
             password="AVNS_TbvbOoIlAM6X64RKzxL",
             port=19275,
             sslmode="verify-ca",
-            sslrootcert="../DB_cert/ca.pem"
+            sslrootcert=r"F:\Flask_Projects\Midnight_9XM\DB_cert\ca.pem"
         )
         return True,connection
     except Exception as e:
@@ -20,7 +20,7 @@ def dbconnection():
 def create(output):
     cursor=output.cursor()
     query='''
-CREATE TABLE "User" (
+CREATE TABLE "login" (
   id SERIAL PRIMARY KEY,
   username VARCHAR(255) NOT NULL UNIQUE,
   email VARCHAR(255) NOT NULL UNIQUE,
@@ -46,12 +46,12 @@ def show_table(output):
 
 def select(output):
     cursor=output.cursor()
-    query='''SELECT * FROM User;'''
+    query='''SELECT * FROM login;'''
     cursor.execute(query)
     table=cursor.fetchall()
     print(table)
     return
 status,output=dbconnection()
 # create(output)
-# show_table(output)
+# # show_table(output)
 select(output)

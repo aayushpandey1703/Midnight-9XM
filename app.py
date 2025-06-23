@@ -1,11 +1,13 @@
-from flask import Flask, render_template, redirect, url_for, make_response,request
+from flask import Flask, render_template, redirect, url_for, make_response,request,session
 import requests
 from loguru import logger
 import json
 import functools
 import psycopg2
+import uuid
 
 app=Flask(__name__)
+app.secret_key="my_secret_key"
 
 TOKEN=None
 def token_generator(func):
@@ -54,6 +56,13 @@ def dbconnection():
 @token_generator
 def index():
     try:
+        session_uid=request.cookies.get("session_uid",None)
+        login_message=request.args.get("login_message",None)
+        print(session_uid)
+        if session_uid:
+            userdata=session[session_uid]
+        else:
+            userdata=None
         # Get trending albums
         url=f"https://api.spotify.com/v1/search?q=tag:India trending&type=album&market=IN&limit=20&offset=0"
         header={
@@ -155,39 +164,92 @@ def index():
                 album["tracks"]=i["tracks"]["total"]
                 workout_list.append(album)
 
-        return render_template("index.htm",trending=trending_albums,eng_trending=english_albums,artists_list=artists_list,workout_list=workout_list)
+        return render_template("index.htm",userdata=userdata,trending=trending_albums,eng_trending=english_albums,artists_list=artists_list,workout_list=workout_list,login_message=login_message)
     except Exception as e:
         logger.error("Error in index function:")
         logger.error(str(e))
-        return render_template("error.htm")
+        return str(e)
 
-@app.route("/login",methods=['GET','POST'])
-def login():
+@app.post("/register")
+def register():
     try:
-        if request.method=="POST":
-            username=request.form.get("username")
-            email=request.form.get("email")
-            password=request.form.get("password")
-            status,connection,error=dbconnection()
-            if connection:
-                cursor=connection.cursor()
-                query=f'''
-                INSERT INTO 'User' 
-                VALUES('{username}','{email}','{password}')
-                 '''
-            cursor.execute()
+        print("POST")
+        username=request.form.get("username")
+        email=request.form.get("email")
+        password=request.form.get("password")
+        print(username)
+        print(email)
+        print(password)
+        status,connection,error=dbconnection()
+        if connection:
+            cursor=connection.cursor()
+            query=f'''
+            INSERT INTO "login" (username, email, password)
+            VALUES ('{username}','{email}','{password}')
+            RETURNING *;
+                '''
+            cursor.execute(query)
+            userdata=cursor.fetchone()
+            logger.info(userdata)
             connection.commit()
-            return redirect(url_for("index"))
-            else:
-                raise Exception("Failed to connect to DB",str(error))
-        elif request.method="GET":
-            pass
+            cursor.close()
+            connection.close()
+            session_uid=str(uuid.uuid4())
+            session[session_uid]={
+                "userID": userdata[0],
+                "username":userdata[1],
+                "email":userdata[2]
+            }
+            response=make_response(redirect(url_for("index")))
+            response.set_cookie("session_uid",session_uid,max_age=3600)
         else:
-            raise Exception("Method not supported",str(request.method))
+            raise Exception("Failed to connect to DB",str(error))
+        
+        return response
     except Exception as e:
         logger.error("Error in login")
         logger.error(str(e))
         return str(e)
+
+@app.post("/login")
+def login():
+    try:
+        email=request.form.get("email")
+        password=request.form.get("password")
+        print("email")
+        print(email)
+        print(password)
+        status,connection,error=dbconnection()
+        if connection:
+            cursor=connection.cursor()
+            cursor.execute(f"SELECT * FROM login where email='{email}' AND password='{password}';")
+            user=cursor.fetchone()
+            logger.info(user)
+            if user is None:
+                logger.error("[login GET] no user found")
+                cursor.execute("SELECT * FROM login;")
+                users=cursor.fetchall()
+                logger.info(users)
+                return redirect(url_for("index",login_message="User is not registered"))
+            cursor.close()
+            connection.close()
+            session_uid=str(uuid.uuid4())
+            session[session_uid]={
+                "userID":user[0],
+                "username":user[1],
+                "email":user[2]
+            }
+            response=make_response(redirect(url_for("index")))
+            response.set_cookie("session_uid",session_uid,max_age=3600)
+        else:
+            raise Exception("Failed to connect to DB",str(error))
+        print
+        return response
+    except Exception as e:
+        logger.error("Error in login")
+        logger.error(str(e))
+        return str(e)
+
 @app.get("/webplayer")
 @token_generator
 def webplayer_get():
@@ -248,6 +310,19 @@ def playlist_add():
         return "True"
     except Exception as e:
         logger.error("Error while adding to playlist")
+        logger.error(str(e))
+        return str(e)
+
+@app.get("/logout")
+def logout():
+    try:
+        session_uid=request.cookies.get("session_uid")
+        response=make_response(redirect(url_for("index")))
+        response.set_cookie("session_uid","",max_age=0)
+        session.pop(session_uid)
+        return response
+    except Exception as e:
+        logger.error("Error in logout")
         logger.error(str(e))
         return str(e)
 
