@@ -29,10 +29,29 @@ CREATE TABLE "User" (
 
      '''
     cursor.execute(query)
-    cursor.commit()
+    output.commit()
     cursor.close()
     output.close()
     return
 
+def show_table(output):
+    cursor=output.cursor()
+    query='''   SELECT table_name
+    FROM information_schema.tables
+    WHERE table_schema = 'public' AND table_type = 'BASE TABLE';'''
+    cursor.execute(query)
+    table=cursor.fetchall()
+    print(table)
+    return
+
+def select(output):
+    cursor=output.cursor()
+    query='''SELECT * FROM User;'''
+    cursor.execute(query)
+    table=cursor.fetchall()
+    print(table)
+    return
 status,output=dbconnection()
-create(output)
+# create(output)
+# show_table(output)
+select(output)

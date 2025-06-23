@@ -16,7 +16,7 @@ def token_generator(func):
         data={
             "grant_type": "client_credentials"
             # "client_id":"ae66df0606854547bc485a5ae566d942",
-            # "client_secret":"2aae1a247a584914b862eeb37bb64fe8"
+            # "client_secret":"2aae1a247a584914b862eeb37bb64fe8"    
         }
         header={
             "Authorization":"Basic YWU2NmRmMDYwNjg1NDU0N2JjNDg1YTVhZTU2NmQ5NDI6MmFhZTFhMjQ3YTU4NDkxNGI4NjJlZWIzN2JiNjRmZTg=",
@@ -44,11 +44,11 @@ def dbconnection():
             sslmode="verify-ca",
             sslrootcert="./DB_cert/ca.pem"
         )
-        return True,connection
+        return True,connection,None 
     except Exception as e:
         logger.error("Error connecting to DB")
         logger.error(str(e))
-        return False, None
+        return False, None,str(e)
 
 @app.get("/")
 @token_generator
@@ -161,6 +161,33 @@ def index():
         logger.error(str(e))
         return render_template("error.htm")
 
+@app.route("/login",methods=['GET','POST'])
+def login():
+    try:
+        if request.method=="POST":
+            username=request.form.get("username")
+            email=request.form.get("email")
+            password=request.form.get("password")
+            status,connection,error=dbconnection()
+            if connection:
+                cursor=connection.cursor()
+                query=f'''
+                INSERT INTO 'User' 
+                VALUES('{username}','{email}','{password}')
+                 '''
+            cursor.execute()
+            connection.commit()
+            return redirect(url_for("index"))
+            else:
+                raise Exception("Failed to connect to DB",str(error))
+        elif request.method="GET":
+            pass
+        else:
+            raise Exception("Method not supported",str(request.method))
+    except Exception as e:
+        logger.error("Error in login")
+        logger.error(str(e))
+        return str(e)
 @app.get("/webplayer")
 @token_generator
 def webplayer_get():
